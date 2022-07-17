@@ -1,11 +1,7 @@
 const { Client, Intents } = require("discord.js");
 
 const client = new Client({
-  intents: [
-    Intents.FLAGS.GUILDS,
-    Intents.FLAGS.GUILD_MESSAGES
-    // Intents.FLAGS.DIRECT_MESSAGES
-  ]
+  intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES]
 });
 
 client.on("ready", () => {
@@ -15,7 +11,7 @@ client.on("ready", () => {
 exports.sendSuccessNotification = (data) => {
   client.emit("successNotification", data);
 };
-exports.sendFaildNotification = (data) => {
+exports.sendFailNotification = (data) => {
   client.emit("failNotification", data);
 };
 
@@ -39,11 +35,5 @@ client.on("failNotification", (data) => {
 
   channel.send(data);
 });
-
-// client.on("messageCreate", (msg) => {
-//   if (msg.content === "ping") {
-//     if (!msg.author.bot) msg.reply("pong");
-//   }
-// });
 
 client.login(process.env.DISCORD_TOKEN);

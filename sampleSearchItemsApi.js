@@ -78,6 +78,8 @@ searchItemsRequest2["Resources"] = searchItemsRequest["Resources"] = [
   "Offers.Listings.Price"
 ];
 
+let prevData;
+
 const timeout = () => {
   setTimeout(() => {
     api.searchItems(searchItemsRequest).then(
@@ -85,7 +87,13 @@ const timeout = () => {
         const searchItemsResponse =
           ProductAdvertisingAPIv1.SearchItemsResponse.constructFromObject(data);
 
+        if (searchItemsResponse["Errors"] !== undefined) {
+          return sendDiscordNotification(
+            searchItemsResponse["Errors"][0]["Message"]
+          );
+        }
         const extractedData = {
+          resultCount: searchItemsResponse.SearchResult.TotalResultCount,
           imageURL:
             searchItemsResponse.SearchResult.Items[0].Images.Primary.Medium.URL,
           productName:
@@ -98,7 +106,11 @@ const timeout = () => {
           keywords: searchItemsRequest["Keywords"]
         };
 
-        sendSuccessNotification(extractedData);
+        if (JSON.stringify(prevData) !== JSON.stringify(extractedData)) {
+          sendSuccessNotification(extractedData);
+
+          prevData = extractedData;
+        }
       },
       function (error) {
         sendFailNotification(
@@ -107,12 +119,21 @@ const timeout = () => {
       }
     );
 
+    let prevData2;
+
     api.searchItems(searchItemsRequest2).then(
       function (data) {
         const searchItemsResponse =
           ProductAdvertisingAPIv1.SearchItemsResponse.constructFromObject(data);
 
+        if (searchItemsResponse["Errors"] !== undefined) {
+          return sendDiscordNotification(
+            searchItemsResponse["Errors"][0]["Message"]
+          );
+        }
+
         const extractedData = {
+          resultCount: searchItemsResponse.SearchResult.TotalResultCount,
           imageURL:
             searchItemsResponse.SearchResult.Items[0].Images.Primary.Medium.URL,
           productName:
@@ -125,7 +146,11 @@ const timeout = () => {
           keywords: searchItemsRequest["Keywords"]
         };
 
-        sendDiscordNotification(extractedData);
+        if (JSON.stringify(prevData2) !== JSON.stringify(extractedData)) {
+          sendSuccessNotification(extractedData);
+
+          prevData2 = extractedData;
+        }
       },
       function (error) {
         sendFailNotification(
