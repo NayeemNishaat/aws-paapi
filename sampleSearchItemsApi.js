@@ -23,6 +23,7 @@
 
 const dotenv = require("dotenv");
 dotenv.config();
+const { Client, Intents } = require("discord.js");
 var ProductAdvertisingAPIv1 = require("./src/index");
 
 var defaultClient = ProductAdvertisingAPIv1.ApiClient.instance;
@@ -138,46 +139,73 @@ function onError(error) {
   }
 }
 
-api.searchItems(searchItemsRequest).then(
-  function (data) {
-    onSuccess(data);
-  },
-  function (error) {
-    onError(error);
-  }
-);
+// api.searchItems(searchItemsRequest).then(
+//   function (data) {
+//     onSuccess(data);
+//   },
+//   function (error) {
+//     onError(error);
+//   }
+// );
 
-api.searchItems(searchItemsRequest2).then(
-  function (data) {
-    onSuccess(data);
-  },
-  function (error) {
-    onError(error);
-  }
-);
+// api.searchItems(searchItemsRequest2).then(
+//   function (data) {
+//     onSuccess(data);
+//   },
+//   function (error) {
+//     onError(error);
+//   }
+// );
 
-const timeout = () => {
+// const timeout = () => {
+//   setTimeout(() => {
+//     api.searchItems(searchItemsRequest).then(
+//       function (data) {
+//         onSuccess(data);
+//       },
+//       function (error) {
+//         onError(error);
+//       }
+//     );
+
+//     api.searchItems(searchItemsRequest2).then(
+//       function (data) {
+//         onSuccess(data);
+//       },
+//       function (error) {
+//         onError(error);
+//       }
+//     );
+
+//     timeout();
+//   }, 2000000);
+// };
+
+// timeout();
+
+// Test:
+const client = new Client({
+  intents: [
+    Intents.FLAGS.GUILDS,
+    Intents.FLAGS.GUILD_MESSAGES
+    // Intents.FLAGS.DIRECT_MESSAGES
+  ]
+});
+
+client.on("ready", () => {
+  console.log(`Logged in as ${client.user.tag}!`);
+
+  const channel = client.channels.cache.get("998227770247221278");
+
   setTimeout(() => {
-    api.searchItems(searchItemsRequest).then(
-      function (data) {
-        onSuccess(data);
-      },
-      function (error) {
-        onError(error);
-      }
-    );
+    channel && channel.send("Nayeem");
+  }, 5000);
+});
 
-    api.searchItems(searchItemsRequest2).then(
-      function (data) {
-        onSuccess(data);
-      },
-      function (error) {
-        onError(error);
-      }
-    );
+client.on("messageCreate", (msg) => {
+  // if (msg.content === "ping") {
+  if (!msg.author.bot) msg.reply("pong");
+  // }
+});
 
-    timeout();
-  }, 20000);
-};
-
-timeout();
+client.login(process.env.DISCORD_TOKEN);
