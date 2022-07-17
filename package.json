@@ -6,11 +6,12 @@
   "main": "src/index.js",
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha --recursive",
-    "lint": "eslint sampleGetBrowseNodesApi.js sampleGetItemsApi.js sampleSearchItemsApi.js sampleGetVariationsApi.js src/auth/*.js"
+    "lint": "eslint sampleGetBrowseNodesApi.js sampleGetItemsApi.js sampleSearchItemsApi.js sampleGetVariationsApi.js src/auth/*.js",
+    "start": "node sampleSearchItemsApi.js",
+    "dev": "nodemon sampleSearchItemsApi.js"
   },
   "author": {
     "name": "Product Advertising API",
-    "email": "",
     "url": "https://webservices.amazon.com/paapi5/documentation/index.html"
   },
   "homepage": "https://github.com/amzn/paapi5-nodejs-sdk",

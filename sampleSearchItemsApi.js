@@ -92,7 +92,7 @@ const timeout = () => {
             searchItemsResponse.SearchResult.Items[0].Offers.Listings[0].Price
               .DisplayAmount,
           productURL: searchItemsResponse.SearchResult.Items[0].DetailPageURL,
-          Keywords: searchItemsRequest["Keywords"]
+          keywords: searchItemsRequest["Keywords"]
         };
 
         sendDiscordNotification(extractedData);
@@ -117,7 +117,7 @@ const timeout = () => {
             searchItemsResponse.SearchResult.Items[0].Offers.Listings[0].Price
               .DisplayAmount,
           productURL: searchItemsResponse.SearchResult.Items[0].DetailPageURL,
-          Keywords: searchItemsRequest["Keywords"]
+          keywords: searchItemsRequest["Keywords"]
         };
 
         sendDiscordNotification(extractedData);

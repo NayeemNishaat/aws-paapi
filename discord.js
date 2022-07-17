@@ -19,6 +19,12 @@ exports.sendDiscordNotification = (data) => {
 client.on("notification", (data) => {
   const channel = client.channels.cache.get("998227770247221278");
   console.log(data);
+  const pretty = `${data.imageURL}
+  Item Found
+  [${data.productName}](${data.productURL})
+  Price: ${data.price}}
+  Keywords: ${data.keywords}`;
+  channel.send(pretty);
 });
 
 // client.on("messageCreate", (msg) => {
