@@ -19,7 +19,7 @@ client.on("successNotification", (data) => {
   const channel = client.channels.cache.get("998227770247221278");
 
   const pretty = `
-  > *Item Found!*
+  > **Item Found!**
   **${data.productName}**
   Price: ${data.price}
   Keywords: ${data.keywords}

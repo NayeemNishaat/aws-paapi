@@ -79,6 +79,7 @@ searchItemsRequest2["Resources"] = searchItemsRequest["Resources"] = [
 ];
 
 let prevData;
+let prevData2;
 
 const timeout = () => {
   setTimeout(() => {
@@ -106,6 +107,11 @@ const timeout = () => {
           keywords: searchItemsRequest["Keywords"]
         };
 
+        console.log(
+          "Is different result for 1st request?",
+          JSON.stringify(prevData) !== JSON.stringify(extractedData)
+        );
+
         if (JSON.stringify(prevData) !== JSON.stringify(extractedData)) {
           sendSuccessNotification(extractedData);
 
@@ -118,8 +124,6 @@ const timeout = () => {
         );
       }
     );
-
-    let prevData2;
 
     api.searchItems(searchItemsRequest2).then(
       function (data) {
@@ -145,6 +149,11 @@ const timeout = () => {
           productURL: searchItemsResponse.SearchResult.Items[0].DetailPageURL,
           keywords: searchItemsRequest["Keywords"]
         };
+
+        console.log(
+          "Is different result for 2nd request?",
+          JSON.stringify(prevData2) !== JSON.stringify(extractedData)
+        );
 
         if (JSON.stringify(prevData2) !== JSON.stringify(extractedData)) {
           sendSuccessNotification(extractedData);
