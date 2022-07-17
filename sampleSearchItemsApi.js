@@ -23,7 +23,10 @@
 
 const dotenv = require("dotenv");
 dotenv.config();
-const { sendDiscordNotification } = require("./discord.js");
+const {
+  sendSuccessNotification,
+  sendFailNotification
+} = require("./discord.js");
 var ProductAdvertisingAPIv1 = require("./src/index");
 
 var defaultClient = ProductAdvertisingAPIv1.ApiClient.instance;
@@ -95,10 +98,12 @@ const timeout = () => {
           keywords: searchItemsRequest["Keywords"]
         };
 
-        sendDiscordNotification(extractedData);
+        sendSuccessNotification(extractedData);
       },
       function (error) {
-        console.log(error);
+        sendFailNotification(
+          JSON.stringify(error["response"]["text"], null, 1)
+        );
       }
     );
 
@@ -123,7 +128,9 @@ const timeout = () => {
         sendDiscordNotification(extractedData);
       },
       function (error) {
-        console.log(error);
+        sendFailNotification(
+          JSON.stringify(error["response"]["text"], null, 1)
+        );
       }
     );
 

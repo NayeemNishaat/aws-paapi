@@ -12,19 +12,32 @@ client.on("ready", () => {
   console.log(`Logged in as ${client.user.tag}!`);
 });
 
-exports.sendDiscordNotification = (data) => {
-  client.emit("notification", data);
+exports.sendSuccessNotification = (data) => {
+  client.emit("successNotification", data);
+};
+exports.sendFaildNotification = (data) => {
+  client.emit("failNotification", data);
 };
 
-client.on("notification", (data) => {
+client.on("successNotification", (data) => {
   const channel = client.channels.cache.get("998227770247221278");
-  console.log(data);
-  const pretty = `${data.imageURL}
-  Item Found
-  [${data.productName}](${data.productURL})
-  Price: ${data.price}}
-  Keywords: ${data.keywords}`;
+
+  const pretty = `
+  > *Item Found!*
+  **${data.productName}**
+  Price: ${data.price}
+  Keywords: ${data.keywords}
+  ${data.imageURL}
+  ${data.productURL}
+  `;
+
   channel.send(pretty);
+});
+
+client.on("failNotification", (data) => {
+  const channel = client.channels.cache.get("998227770247221278");
+
+  channel.send(data);
 });
 
 // client.on("messageCreate", (msg) => {
