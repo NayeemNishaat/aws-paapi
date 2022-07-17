@@ -16,7 +16,7 @@ exports.sendFailNotification = (data) => {
 };
 
 client.on("successNotification", (data) => {
-  const channel = client.channels.cache.get("998227770247221278");
+  const channel = client.channels.cache.get(process.env.CHANNEL_ID);
 
   const pretty = `
   > **Item Found!**
@@ -31,9 +31,9 @@ client.on("successNotification", (data) => {
 });
 
 client.on("failNotification", (data) => {
-  const channel = client.channels.cache.get("998227770247221278");
+  const channel = client.channels.cache.get(process.env.CHANNEL_ID);
 
   channel.send(data);
 });
 
-client.login(process.env.DISCORD_TOKEN);
+client.login(process.env.TOKEN);
