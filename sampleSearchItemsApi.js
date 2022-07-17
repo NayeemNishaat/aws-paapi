@@ -23,7 +23,7 @@
 
 const dotenv = require("dotenv");
 dotenv.config();
-const { Client, Intents } = require("discord.js");
+// const { sendDiscordNotification } = require("./discord.js");
 var ProductAdvertisingAPIv1 = require("./src/index");
 
 var defaultClient = ProductAdvertisingAPIv1.ApiClient.instance;
@@ -63,7 +63,7 @@ searchItemsRequest["SearchIndex"] = "Books";
 searchItemsRequest2["SearchIndex"] = "VideoGames";
 
 /** Specify item count to be returned in search result */
-searchItemsRequest2["ItemCount"] = searchItemsRequest["ItemCount"] = 2;
+searchItemsRequest2["ItemCount"] = searchItemsRequest["ItemCount"] = 1;
 
 /**
  * Choose resources you want from SearchItemsResource enum
@@ -75,137 +75,60 @@ searchItemsRequest2["Resources"] = searchItemsRequest["Resources"] = [
   "Offers.Listings.Price"
 ];
 
-function onSuccess(data) {
-  console.log("API called successfully.");
-  var searchItemsResponse =
-    ProductAdvertisingAPIv1.SearchItemsResponse.constructFromObject(data);
-  console.log(
-    "Complete Response: \n" + JSON.stringify(searchItemsResponse, null, 1)
-  );
-  if (searchItemsResponse["SearchResult"] !== undefined) {
-    console.log("Printing First Item Information in SearchResult:");
-    var item_0 = searchItemsResponse["SearchResult"]["Items"][0];
-    if (item_0 !== undefined) {
-      if (item_0["ASIN"] !== undefined) {
-        console.log("ASIN: " + item_0["ASIN"]);
-      }
-      if (item_0["DetailPageURL"] !== undefined) {
-        console.log("DetailPageURL: " + item_0["DetailPageURL"]);
-      }
-      if (
-        item_0["ItemInfo"] !== undefined &&
-        item_0["ItemInfo"]["Title"] !== undefined &&
-        item_0["ItemInfo"]["Title"]["DisplayValue"] !== undefined
-      ) {
-        console.log("Title: " + item_0["ItemInfo"]["Title"]["DisplayValue"]);
-      }
-      if (
-        item_0["Offers"] !== undefined &&
-        item_0["Offers"]["Listings"] !== undefined &&
-        item_0["Offers"]["Listings"][0]["Price"] !== undefined &&
-        item_0["Offers"]["Listings"][0]["Price"]["DisplayAmount"] !== undefined
-      ) {
-        console.log(
-          "Buying Price: " +
-            item_0["Offers"]["Listings"][0]["Price"]["DisplayAmount"]
-        );
-      }
-    }
-  }
-  if (searchItemsResponse["Errors"] !== undefined) {
-    console.log("Errors:");
-    console.log(
-      "Complete Error Response: " +
-        JSON.stringify(searchItemsResponse["Errors"], null, 1)
-    );
-    console.log("Printing 1st Error:");
-    var error_0 = searchItemsResponse["Errors"][0];
-    console.log("Error Code: " + error_0["Code"]);
-    console.log("Error Message: " + error_0["Message"]);
-  }
-}
-
-function onError(error) {
-  console.log("Error calling PA-API 5.0!");
-  // console.log("Printing Full Error Object:\n" + JSON.stringify(error, null, 1));
-  console.log("Status Code: " + error["status"]);
-  if (
-    error["response"] !== undefined &&
-    error["response"]["text"] !== undefined
-  ) {
-    console.log(
-      "Error Object: " + JSON.stringify(error["response"]["text"], null, 1)
-    );
-  }
-}
-
-// api.searchItems(searchItemsRequest).then(
-//   function (data) {
-//     onSuccess(data);
-//   },
-//   function (error) {
-//     onError(error);
-//   }
-// );
-
-// api.searchItems(searchItemsRequest2).then(
-//   function (data) {
-//     onSuccess(data);
-//   },
-//   function (error) {
-//     onError(error);
-//   }
-// );
-
-// const timeout = () => {
-//   setTimeout(() => {
-//     api.searchItems(searchItemsRequest).then(
-//       function (data) {
-//         onSuccess(data);
-//       },
-//       function (error) {
-//         onError(error);
-//       }
-//     );
-
-//     api.searchItems(searchItemsRequest2).then(
-//       function (data) {
-//         onSuccess(data);
-//       },
-//       function (error) {
-//         onError(error);
-//       }
-//     );
-
-//     timeout();
-//   }, 2000000);
-// };
-
-// timeout();
-
-// Test:
-const client = new Client({
-  intents: [
-    Intents.FLAGS.GUILDS,
-    Intents.FLAGS.GUILD_MESSAGES
-    // Intents.FLAGS.DIRECT_MESSAGES
-  ]
-});
-
-client.on("ready", () => {
-  console.log(`Logged in as ${client.user.tag}!`);
-
-  const channel = client.channels.cache.get("998227770247221278");
-
+const timeout = () => {
   setTimeout(() => {
-    channel && channel.send("Nayeem");
-  }, 5000);
-});
+    api.searchItems(searchItemsRequest).then(
+      function (data) {
+        const searchItemsResponse =
+          ProductAdvertisingAPIv1.SearchItemsResponse.constructFromObject(data);
 
-client.on("messageCreate", (msg) => {
-  // if (msg.content === "ping") {
-  if (!msg.author.bot) msg.reply("pong");
-  // }
-});
+        const extractedData = {
+          imageURL:
+            searchItemsResponse.SearchResult.Items[0].Images.Primary.Medium.URL,
+          productName:
+            searchItemsResponse.SearchResult.Items[0].ItemInfo.Title
+              .DisplayValue,
+          price:
+            searchItemsResponse.SearchResult.Items[0].Offers.Listings[0].Price
+              .DisplayAmount,
+          productURL: searchItemsResponse.SearchResult.Items[0].DetailPageURL,
+          Keywords: searchItemsRequest["Keywords"]
+        };
 
-client.login(process.env.DISCORD_TOKEN);
+        console.log(extractedData);
+      },
+      function (error) {
+        console.log(error);
+      }
+    );
+
+    api.searchItems(searchItemsRequest2).then(
+      function (data) {
+        const searchItemsResponse =
+          ProductAdvertisingAPIv1.SearchItemsResponse.constructFromObject(data);
+
+        const extractedData = {
+          imageURL:
+            searchItemsResponse.SearchResult.Items[0].Images.Primary.Medium.URL,
+          productName:
+            searchItemsResponse.SearchResult.Items[0].ItemInfo.Title
+              .DisplayValue,
+          price:
+            searchItemsResponse.SearchResult.Items[0].Offers.Listings[0].Price
+              .DisplayAmount,
+          productURL: searchItemsResponse.SearchResult.Items[0].DetailPageURL,
+          Keywords: searchItemsRequest["Keywords"]
+        };
+
+        console.log(extractedData);
+      },
+      function (error) {
+        console.log(error);
+      }
+    );
+
+    timeout();
+  }, 2000);
+};
+
+timeout();
