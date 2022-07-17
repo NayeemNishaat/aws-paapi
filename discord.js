@@ -1,9 +1,5 @@
 const { Client, Intents } = require("discord.js");
 
-exports.sendDiscordNotification = (channel) => {
-  channel.send("Nayeem Nishaat");
-};
-
 const client = new Client({
   intents: [
     Intents.FLAGS.GUILDS,
@@ -14,16 +10,21 @@ const client = new Client({
 
 client.on("ready", () => {
   console.log(`Logged in as ${client.user.tag}!`);
+});
 
+exports.sendDiscordNotification = (data) => {
+  client.emit("notification", data);
+};
+
+client.on("notification", (data) => {
   const channel = client.channels.cache.get("998227770247221278");
-
-  sendDiscordNotification(channel);
+  console.log(data);
 });
 
-client.on("messageCreate", (msg) => {
-  // if (msg.content === "ping") {
-  if (!msg.author.bot) msg.reply("pong");
-  // }
-});
+// client.on("messageCreate", (msg) => {
+//   if (msg.content === "ping") {
+//     if (!msg.author.bot) msg.reply("pong");
+//   }
+// });
 
 client.login(process.env.DISCORD_TOKEN);

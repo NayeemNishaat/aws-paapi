@@ -23,7 +23,7 @@
 
 const dotenv = require("dotenv");
 dotenv.config();
-// const { sendDiscordNotification } = require("./discord.js");
+const { sendDiscordNotification } = require("./discord.js");
 var ProductAdvertisingAPIv1 = require("./src/index");
 
 var defaultClient = ProductAdvertisingAPIv1.ApiClient.instance;
@@ -95,7 +95,7 @@ const timeout = () => {
           Keywords: searchItemsRequest["Keywords"]
         };
 
-        console.log(extractedData);
+        sendDiscordNotification(extractedData);
       },
       function (error) {
         console.log(error);
@@ -120,7 +120,7 @@ const timeout = () => {
           Keywords: searchItemsRequest["Keywords"]
         };
 
-        console.log(extractedData);
+        sendDiscordNotification(extractedData);
       },
       function (error) {
         console.log(error);
@@ -128,7 +128,7 @@ const timeout = () => {
     );
 
     timeout();
-  }, 2000);
+  }, 10000);
 };
 
 timeout();
