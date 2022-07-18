@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <script>
+      const submitHandler = async (e) => {
+        e.preventDefault();
+
+        const k1 = document.getElementById("k1").value;
+        const k2 = document.getElementById("k2").value;
+        const si1 = document.getElementById("si1").value;
+        const si2 = document.getElementById("si2").value;
+
+        await fetch("http://localhost:5000/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            todo: "Buy the milk"
+          })
+        });
+      };
+    </script>
+  </head>
+  <body style="margin: 0">
+    <form
+      style="
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        flex-direction: column;
+        gap: 1rem;
+      "
+      onsubmit="submitHandler(event)"
+    >
+      <div style="display: flex; flex-direction: column; gap: 0.8rem">
+        <div style="display: flex; gap: 1rem">
+          <span style="flex: 1">Keywords for first request:</span>
+          <input id="k1" required style="width: 8rem" type="text" />
+        </div>
+        <div style="display: flex; gap: 1rem">
+          <span style="flex: 1">Keywords for second request:</span>
+          <input id="k2" required style="width: 8rem" type="text" />
+        </div>
+        <div style="display: flex; gap: 1rem">
+          <span style="flex: 1">Search index for first request:</span>
+          <input id="si1" style="width: 8rem" type="text" />
+        </div>
+        <div style="display: flex; gap: 1rem">
+          <span style="flex: 1">Search index for second request:</span>
+          <input id="si2" required style="width: 8rem" type="text" />
+        </div>
+      </div>
+
+      <button type="submit">Submit</button>
+    </form>
+  </body>
+</html>
