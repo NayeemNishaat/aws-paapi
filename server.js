@@ -1,4 +1,5 @@
 const http = require("node:http");
+const initiateSearch = require("./sampleSearchItemsApi");
 
 const server = http.createServer((req, res) => {
   let rawData = "";
@@ -10,7 +11,8 @@ const server = http.createServer((req, res) => {
   req.on("end", () => {
     try {
       const parsedData = JSON.parse(rawData);
-      console.log(parsedData);
+
+      initiateSearch(parsedData);
 
       res.setHeader("Access-Control-Allow-Origin", "*");
       res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS");

@@ -55,15 +55,15 @@ searchItemsRequest2["PartnerType"] = searchItemsRequest["PartnerType"] =
   "Associates";
 
 /** Specify Keywords */
-searchItemsRequest["Keywords"] = "Harry Potter";
-searchItemsRequest2["Keywords"] = "Farcry 3";
+// searchItemsRequest["Keywords"] = "Harry Potter";
+// searchItemsRequest2["Keywords"] = "Farcry 3";
 
 /**
  * Specify the category in which search request is to be made
  * For more details, refer: https://webservices.amazon.com/paapi5/documentation/use-cases/organization-of-items-on-amazon/search-index.html
  */
-searchItemsRequest["SearchIndex"] = "Books";
-searchItemsRequest2["SearchIndex"] = "VideoGames";
+// searchItemsRequest["SearchIndex"] = "Books";
+// searchItemsRequest2["SearchIndex"] = "VideoGames";
 
 /** Specify item count to be returned in search result */
 searchItemsRequest2["ItemCount"] = searchItemsRequest["ItemCount"] = 1;
@@ -81,105 +81,121 @@ searchItemsRequest2["Resources"] = searchItemsRequest["Resources"] = [
 let prevData;
 let prevData2;
 
-const timeout = () => {
-  setTimeout(() => {
-    api.searchItems(searchItemsRequest).then(
-      function (data) {
-        const searchItemsResponse =
-          ProductAdvertisingAPIv1.SearchItemsResponse.constructFromObject(data);
+const initiateSearch = (parsedData) => {
+  searchItemsRequest["Keywords"] = parsedData.keywords1;
+  searchItemsRequest2["Keywords"] = parsedData.keywords2;
 
-        if (searchItemsResponse["Errors"] !== undefined) {
-          return sendDiscordNotification(
-            searchItemsResponse["Errors"][0]["Message"]
+  searchItemsRequest["SearchIndex"] = parsedData.searchIndex1;
+  searchItemsRequest2["SearchIndex"] = parsedData.searchIndex1;
+
+  const timeout = () => {
+    setTimeout(() => {
+      api.searchItems(searchItemsRequest).then(
+        function (data) {
+          const searchItemsResponse =
+            ProductAdvertisingAPIv1.SearchItemsResponse.constructFromObject(
+              data
+            );
+
+          if (searchItemsResponse["Errors"] !== undefined) {
+            return sendDiscordNotification(
+              searchItemsResponse["Errors"][0]["Message"]
+            );
+          }
+          const extractedData = {
+            resultCount: searchItemsResponse.SearchResult.TotalResultCount,
+            imageURL:
+              searchItemsResponse.SearchResult.Items[0].Images.Primary.Medium
+                .URL,
+            productName:
+              searchItemsResponse.SearchResult.Items[0].ItemInfo.Title
+                .DisplayValue,
+            price:
+              searchItemsResponse.SearchResult.Items[0].Offers.Listings[0].Price
+                .DisplayAmount,
+            productURL: searchItemsResponse.SearchResult.Items[0].DetailPageURL,
+            keywords: searchItemsRequest["Keywords"]
+          };
+
+          console.log(
+            "Is different result for 1st request?",
+            JSON.stringify(prevData) !== JSON.stringify(extractedData)
           );
+
+          if (JSON.stringify(prevData) !== JSON.stringify(extractedData)) {
+            sendSuccessNotification(extractedData);
+
+            prevData = extractedData;
+          }
+        },
+        function (error) {
+          if (
+            error["response"] !== undefined &&
+            error["response"]["text"] !== undefined
+          ) {
+            sendFailNotification(
+              JSON.stringify(error["response"]["text"], null, 1)
+            );
+          }
         }
-        const extractedData = {
-          resultCount: searchItemsResponse.SearchResult.TotalResultCount,
-          imageURL:
-            searchItemsResponse.SearchResult.Items[0].Images.Primary.Medium.URL,
-          productName:
-            searchItemsResponse.SearchResult.Items[0].ItemInfo.Title
-              .DisplayValue,
-          price:
-            searchItemsResponse.SearchResult.Items[0].Offers.Listings[0].Price
-              .DisplayAmount,
-          productURL: searchItemsResponse.SearchResult.Items[0].DetailPageURL,
-          keywords: searchItemsRequest["Keywords"]
-        };
+      );
 
-        console.log(
-          "Is different result for 1st request?",
-          JSON.stringify(prevData) !== JSON.stringify(extractedData)
-        );
+      api.searchItems(searchItemsRequest2).then(
+        function (data) {
+          const searchItemsResponse =
+            ProductAdvertisingAPIv1.SearchItemsResponse.constructFromObject(
+              data
+            );
 
-        if (JSON.stringify(prevData) !== JSON.stringify(extractedData)) {
-          sendSuccessNotification(extractedData);
+          if (searchItemsResponse["Errors"] !== undefined) {
+            return sendDiscordNotification(
+              searchItemsResponse["Errors"][0]["Message"]
+            );
+          }
 
-          prevData = extractedData;
-        }
-      },
-      function (error) {
-        if (
-          error["response"] !== undefined &&
-          error["response"]["text"] !== undefined
-        ) {
-          sendFailNotification(
-            JSON.stringify(error["response"]["text"], null, 1)
+          const extractedData = {
+            resultCount: searchItemsResponse.SearchResult.TotalResultCount,
+            imageURL:
+              searchItemsResponse.SearchResult.Items[0].Images.Primary.Medium
+                .URL,
+            productName:
+              searchItemsResponse.SearchResult.Items[0].ItemInfo.Title
+                .DisplayValue,
+            price:
+              searchItemsResponse.SearchResult.Items[0].Offers.Listings[0].Price
+                .DisplayAmount,
+            productURL: searchItemsResponse.SearchResult.Items[0].DetailPageURL,
+            keywords: searchItemsRequest["Keywords"]
+          };
+
+          console.log(
+            "Is different result for 2nd request?",
+            JSON.stringify(prevData2) !== JSON.stringify(extractedData)
           );
+
+          if (JSON.stringify(prevData2) !== JSON.stringify(extractedData)) {
+            sendSuccessNotification(extractedData);
+
+            prevData2 = extractedData;
+          }
+        },
+        function (error) {
+          if (
+            error["response"] !== undefined &&
+            error["response"]["text"] !== undefined
+          ) {
+            sendFailNotification(
+              JSON.stringify(error["response"]["text"], null, 1)
+            );
+          }
         }
-      }
-    );
+      );
 
-    api.searchItems(searchItemsRequest2).then(
-      function (data) {
-        const searchItemsResponse =
-          ProductAdvertisingAPIv1.SearchItemsResponse.constructFromObject(data);
+      timeout();
+    }, 20000);
+  };
 
-        if (searchItemsResponse["Errors"] !== undefined) {
-          return sendDiscordNotification(
-            searchItemsResponse["Errors"][0]["Message"]
-          );
-        }
-
-        const extractedData = {
-          resultCount: searchItemsResponse.SearchResult.TotalResultCount,
-          imageURL:
-            searchItemsResponse.SearchResult.Items[0].Images.Primary.Medium.URL,
-          productName:
-            searchItemsResponse.SearchResult.Items[0].ItemInfo.Title
-              .DisplayValue,
-          price:
-            searchItemsResponse.SearchResult.Items[0].Offers.Listings[0].Price
-              .DisplayAmount,
-          productURL: searchItemsResponse.SearchResult.Items[0].DetailPageURL,
-          keywords: searchItemsRequest["Keywords"]
-        };
-
-        console.log(
-          "Is different result for 2nd request?",
-          JSON.stringify(prevData2) !== JSON.stringify(extractedData)
-        );
-
-        if (JSON.stringify(prevData2) !== JSON.stringify(extractedData)) {
-          sendSuccessNotification(extractedData);
-
-          prevData2 = extractedData;
-        }
-      },
-      function (error) {
-        if (
-          error["response"] !== undefined &&
-          error["response"]["text"] !== undefined
-        ) {
-          sendFailNotification(
-            JSON.stringify(error["response"]["text"], null, 1)
-          );
-        }
-      }
-    );
-
-    timeout();
-  }, 10000);
+  timeout();
 };
 
-timeout();
+module.exports = initiateSearch;
