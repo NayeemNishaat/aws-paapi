@@ -10,10 +10,10 @@
       const submitHandler = async (e) => {
         e.preventDefault();
 
-        const k1 = document.getElementById("k1").value;
-        const k2 = document.getElementById("k2").value;
-        const si1 = document.getElementById("si1").value;
-        const si2 = document.getElementById("si2").value;
+        const keywords1 = document.getElementById("k1").value;
+        const keywords2 = document.getElementById("k2").value;
+        const searchIndex1 = document.getElementById("si1").value;
+        const searchIndex2 = document.getElementById("si2").value;
 
         await fetch("http://localhost:5000/", {
           method: "POST",
@@ -21,7 +21,10 @@
             "Content-Type": "application/json"
           },
           body: JSON.stringify({
-            todo: "Buy the milk"
+            keywords1,
+            searchIndex1,
+            keywords2,
+            searchIndex2
           })
         });
       };
