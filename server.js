@@ -2,6 +2,12 @@ const http = require("node:http");
 const initiateSearch = require("./sampleSearchItemsApi");
 
 const server = http.createServer((req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
+  res.setHeader("Access-Control-Max-Age", "3600");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  res.writeHead(200);
+
   let rawData = "";
 
   req.on("data", (chunk) => {
@@ -14,11 +20,7 @@ const server = http.createServer((req, res) => {
 
       initiateSearch(parsedData);
 
-      res.setHeader("Access-Control-Allow-Origin", "*");
-      res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
-      res.setHeader("Access-Control-Max-Age", "3600");
-      res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-
+      res.statusCode = 200;
       res.end(
         JSON.stringify({
           status: "success"

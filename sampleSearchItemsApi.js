@@ -88,7 +88,7 @@ const initiateSearch = (parsedData) => {
   searchItemsRequest["SearchIndex"] = parsedData.searchIndex1;
   searchItemsRequest2["SearchIndex"] = parsedData.searchIndex1;
 
-  const timeout = () => {
+  const timeout1 = () => {
     setTimeout(() => {
       api.searchItems(searchItemsRequest).then(
         function (data) {
@@ -140,6 +140,12 @@ const initiateSearch = (parsedData) => {
         }
       );
 
+      timeout1();
+    }, 20000);
+  };
+
+  const timeout2 = () => {
+    setTimeout(() => {
       api.searchItems(searchItemsRequest2).then(
         function (data) {
           const searchItemsResponse =
@@ -191,11 +197,15 @@ const initiateSearch = (parsedData) => {
         }
       );
 
-      timeout();
+      timeout2();
     }, 20000);
   };
 
-  timeout();
+  timeout1();
+
+  setTimeout(() => {
+    timeout2();
+  }, 20000);
 };
 
 module.exports = initiateSearch;
