@@ -119,9 +119,14 @@ const timeout = () => {
         }
       },
       function (error) {
-        sendFailNotification(
-          JSON.stringify(error["response"]["text"], null, 1)
-        );
+        if (
+          error["response"] !== undefined &&
+          error["response"]["text"] !== undefined
+        ) {
+          sendFailNotification(
+            JSON.stringify(error["response"]["text"], null, 1)
+          );
+        }
       }
     );
 
@@ -162,9 +167,14 @@ const timeout = () => {
         }
       },
       function (error) {
-        sendFailNotification(
-          JSON.stringify(error["response"]["text"], null, 1)
-        );
+        if (
+          error["response"] !== undefined &&
+          error["response"]["text"] !== undefined
+        ) {
+          sendFailNotification(
+            JSON.stringify(error["response"]["text"], null, 1)
+          );
+        }
       }
     );
 
