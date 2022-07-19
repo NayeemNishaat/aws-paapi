@@ -1,38 +1,51 @@
 const http = require("node:http");
+const fs = require("node:fs/promises");
 const initiateSearch = require("./sampleSearchItemsApi");
 
-const server = http.createServer((req, res) => {
+const server = http.createServer(async (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
   res.setHeader("Access-Control-Max-Age", "3600");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-  res.writeHead(200);
 
-  let rawData = "";
+  if (req.method === "OPTIONS") {
+    res.statusCode = 200;
+    return res.end();
+  }
 
-  req.on("data", (chunk) => {
-    rawData += chunk;
-  });
+  if (req.url === "/") {
+    const data = await fs.readFile(`${__dirname}/index.html`);
 
-  req.on("end", () => {
-    try {
-      const parsedData = rawData && JSON.parse(rawData);
+    res.end(data);
+  }
 
-      initiateSearch(parsedData);
+  if (req.url === "/api/search" && req.method === "POST") {
+    let rawData = "";
 
-      res.statusCode = 200;
-      res.end(
-        JSON.stringify({
-          status: "success"
-        })
-      );
-    } catch (e) {
-      console.error(e.message);
+    req.on("data", (chunk) => {
+      rawData += chunk;
+    });
 
-      res.statusCode = 500;
-      res.end(JSON.stringify({ status: "fail" }));
-    }
-  });
+    req.on("end", () => {
+      try {
+        const parsedData = rawData && JSON.parse(rawData);
+
+        initiateSearch(parsedData);
+
+        res.statusCode = 200;
+        res.end(
+          JSON.stringify({
+            status: "success"
+          })
+        );
+      } catch (e) {
+        console.error(e.message);
+
+        res.statusCode = 500;
+        res.end(JSON.stringify({ status: "fail" }));
+      }
+    });
+  }
 });
 
 server.listen(5000, () => {

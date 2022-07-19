@@ -15,7 +15,7 @@
         const searchIndex1 = document.getElementById("si1").value;
         const searchIndex2 = document.getElementById("si2").value;
 
-        await fetch("http://localhost:5000/", {
+        await fetch("http://localhost:5000/api/search", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"

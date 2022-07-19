@@ -90,7 +90,7 @@ const initiateSearch = (parsedData) => {
   searchItemsRequest2["Keywords"] = parsedData.keywords2;
 
   searchItemsRequest["SearchIndex"] = parsedData.searchIndex1;
-  searchItemsRequest2["SearchIndex"] = parsedData.searchIndex1;
+  searchItemsRequest2["SearchIndex"] = parsedData.searchIndex2;
 
   const timeout1 = () => {
     timer1 = setTimeout(() => {
