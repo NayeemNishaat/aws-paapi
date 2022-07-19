@@ -81,6 +81,10 @@ searchItemsRequest2["Resources"] = searchItemsRequest["Resources"] = [
 let prevData;
 let prevData2;
 
+let timer1;
+let timer2;
+let timer3;
+
 const initiateSearch = (parsedData) => {
   searchItemsRequest["Keywords"] = parsedData.keywords1;
   searchItemsRequest2["Keywords"] = parsedData.keywords2;
@@ -89,7 +93,7 @@ const initiateSearch = (parsedData) => {
   searchItemsRequest2["SearchIndex"] = parsedData.searchIndex1;
 
   const timeout1 = () => {
-    setTimeout(() => {
+    timer1 = setTimeout(() => {
       api.searchItems(searchItemsRequest).then(
         function (data) {
           const searchItemsResponse =
@@ -139,13 +143,12 @@ const initiateSearch = (parsedData) => {
           }
         }
       );
-
       timeout1();
     }, 20000);
   };
 
   const timeout2 = () => {
-    setTimeout(() => {
+    timer2 = setTimeout(() => {
       api.searchItems(searchItemsRequest2).then(
         function (data) {
           const searchItemsResponse =
@@ -201,11 +204,15 @@ const initiateSearch = (parsedData) => {
     }, 20000);
   };
 
+  clearTimeout(timer1);
+  clearTimeout(timer2);
+  clearTimeout(timer3);
+
   timeout1();
 
-  setTimeout(() => {
+  timer3 = setTimeout(() => {
     timeout2();
-  }, 20000);
+  }, 10000);
 };
 
 module.exports = initiateSearch;
