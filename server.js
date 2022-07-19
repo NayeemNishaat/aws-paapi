@@ -16,8 +16,7 @@ const server = http.createServer((req, res) => {
 
   req.on("end", () => {
     try {
-      const parsedData = JSON.parse(`${rawData}`);
-      console.log(parsedData);
+      const parsedData = rawData && JSON.parse(rawData);
 
       initiateSearch(parsedData);
 
