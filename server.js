@@ -29,6 +29,7 @@ const server = http.createServer(async (req, res) => {
     req.on("end", () => {
       try {
         const parsedData = rawData && JSON.parse(rawData);
+        console.log(parsedData);
 
         initiateSearch(parsedData);
 

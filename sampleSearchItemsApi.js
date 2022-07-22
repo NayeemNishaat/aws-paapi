@@ -86,12 +86,6 @@ let timer2;
 let timer3;
 
 const initiateSearch = (parsedData) => {
-  searchItemsRequest["Keywords"] = parsedData.keywords1;
-  searchItemsRequest2["Keywords"] = parsedData.keywords2;
-
-  searchItemsRequest["SearchIndex"] = parsedData.searchIndex1;
-  searchItemsRequest2["SearchIndex"] = parsedData.searchIndex2;
-
   const timeout1 = () => {
     timer1 = setTimeout(() => {
       api.searchItems(searchItemsRequest).then(
@@ -133,6 +127,7 @@ const initiateSearch = (parsedData) => {
           }
         },
         function (error) {
+          console.log(JSON.stringify(error["response"]["text"], null, 1));
           if (
             error["response"] !== undefined &&
             error["response"]["text"] !== undefined
@@ -189,6 +184,7 @@ const initiateSearch = (parsedData) => {
           }
         },
         function (error) {
+          console.log(JSON.stringify(error["response"]["text"], null, 1));
           if (
             error["response"] !== undefined &&
             error["response"]["text"] !== undefined
@@ -208,11 +204,31 @@ const initiateSearch = (parsedData) => {
   clearTimeout(timer2);
   clearTimeout(timer3);
 
-  timeout1();
+  if (parsedData.keywords1) {
+    searchItemsRequest["Keywords"] = parsedData.keywords1;
+    searchItemsRequest["SearchIndex"] = parsedData.searchIndex1;
+    searchItemsRequest["Brand"] = parsedData.brand1;
+    searchItemsRequest["Merchant"] = parsedData.merchant1;
+    searchItemsRequest["MinPrice"] = +parsedData.minprice1;
+    searchItemsRequest["MaxPrice"] = +parsedData.maxprice1;
+    searchItemsRequest["MinSavingPercent"] = +parsedData.percent1;
 
-  timer3 = setTimeout(() => {
-    timeout2();
-  }, 10000);
+    timeout1();
+  }
+
+  if (parsedData.keywords2) {
+    searchItemsRequest["Keywords"] = parsedData.keywords2;
+    searchItemsRequest["SearchIndex"] = parsedData.searchIndex2;
+    searchItemsRequest["Brand"] = parsedData.brand2;
+    searchItemsRequest["Merchant"] = parsedData.merchant2;
+    searchItemsRequest["MinPrice"] = +parsedData.minprice2;
+    searchItemsRequest["MaxPrice"] = +parsedData.maxprice2;
+    searchItemsRequest["MinSavingPercent"] = +parsedData.percent2;
+
+    timer3 = setTimeout(() => {
+      timeout2();
+    }, 10000);
+  }
 };
 
 module.exports = initiateSearch;

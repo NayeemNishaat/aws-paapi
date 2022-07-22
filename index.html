@@ -10,10 +10,20 @@
       const submitHandler = async (e) => {
         e.preventDefault();
 
-        const keywords1 = document.getElementById("k1").value;
-        const keywords2 = document.getElementById("k2").value;
-        const searchIndex1 = document.getElementById("si1").value;
-        const searchIndex2 = document.getElementById("si2").value;
+        const keywords1 = document.getElementById("keywords1").value;
+        const keywords2 = document.getElementById("keywords2").value;
+        const brand1 = document.getElementById("brand1").value;
+        const brand2 = document.getElementById("brand2").value;
+        const merchant1 = document.getElementById("merchant1").value;
+        const merchant2 = document.getElementById("merchant2").value;
+        const minprice1 = document.getElementById("minprice1").value;
+        const minprice2 = document.getElementById("minprice2").value;
+        const searchIndex1 = document.getElementById("searchIndex1").value;
+        const searchIndex2 = document.getElementById("searchIndex2").value;
+        const maxprice1 = document.getElementById("maxprice1").value;
+        const maxprice2 = document.getElementById("maxprice2").value;
+        const percent1 = document.getElementById("percent1").value;
+        const percent2 = document.getElementById("percent2").value;
 
         await fetch("http://localhost:5000/api/search", {
           method: "POST",
@@ -23,8 +33,18 @@
           body: JSON.stringify({
             keywords1,
             searchIndex1,
+            brand1,
+            merchant1,
+            minprice1,
+            maxprice1,
+            percent1,
             keywords2,
-            searchIndex2
+            searchIndex2,
+            brand2,
+            merchant2,
+            minprice2,
+            maxprice2,
+            percent2
           })
         });
       };
@@ -45,19 +65,60 @@
       <div style="display: flex; flex-direction: column; gap: 0.8rem">
         <div style="display: flex; gap: 1rem">
           <span style="flex: 1">Keywords for first request:</span>
-          <input id="k1" required style="width: 8rem" type="text" />
+          <input id="keywords1" style="width: 8rem" type="text" />
         </div>
         <div style="display: flex; gap: 1rem">
           <span style="flex: 1">Search index for first request:</span>
-          <input id="si1" style="width: 8rem" type="text" />
+          <input id="searchIndex1" style="width: 8rem" type="text" />
         </div>
         <div style="display: flex; gap: 1rem">
+          <span style="flex: 1">Brand for first request:</span>
+          <input id="brand1" style="width: 8rem" type="text" />
+        </div>
+        <div style="display: flex; gap: 1rem">
+          <span style="flex: 1">Merchant for first request:</span>
+          <input id="merchant1" style="width: 8rem" type="text" />
+        </div>
+        <div style="display: flex; gap: 1rem">
+          <span style="flex: 1">Min price for first request:</span>
+          <input id="minprice1" style="width: 8rem" type="number" />
+        </div>
+        <div style="display: flex; gap: 1rem">
+          <span style="flex: 1">Max price for first request:</span>
+          <input id="maxprice1" style="width: 8rem" type="number" />
+        </div>
+        <div style="display: flex; gap: 1rem">
+          <span style="flex: 1">Min saving percent for first request:</span>
+          <input id="percent1" style="width: 8rem" type="number" />
+        </div>
+        <br />
+        <div style="display: flex; gap: 1rem">
           <span style="flex: 1">Keywords for second request:</span>
-          <input id="k2" required style="width: 8rem" type="text" />
+          <input id="keywords2" style="width: 8rem" type="text" />
         </div>
         <div style="display: flex; gap: 1rem">
           <span style="flex: 1">Search index for second request:</span>
-          <input id="si2" required style="width: 8rem" type="text" />
+          <input id="searchIndex2" style="width: 8rem" type="text" />
+        </div>
+        <div style="display: flex; gap: 1rem">
+          <span style="flex: 1">Brand for second request:</span>
+          <input id="brand2" style="width: 8rem" type="text" />
+        </div>
+        <div style="display: flex; gap: 1rem">
+          <span style="flex: 1">Merchant for second request:</span>
+          <input id="merchant2" style="width: 8rem" type="text" />
+        </div>
+        <div style="display: flex; gap: 1rem">
+          <span style="flex: 1">Min price for second request:</span>
+          <input id="minprice2" style="width: 8rem" type="number" />
+        </div>
+        <div style="display: flex; gap: 1rem">
+          <span style="flex: 1">Max price for second request:</span>
+          <input id="maxprice2" style="width: 8rem" type="number" />
+        </div>
+        <div style="display: flex; gap: 1rem">
+          <span style="flex: 1">Min saving percent for second request:</span>
+          <input id="percent2" style="width: 8rem" type="number" />
         </div>
       </div>
 
