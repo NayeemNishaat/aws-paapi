@@ -211,7 +211,8 @@ const initiateSearch = (parsedData) => {
     searchItemsRequest["Merchant"] = parsedData.merchant1;
     searchItemsRequest["MinPrice"] = +parsedData.minprice1;
     searchItemsRequest["MaxPrice"] = +parsedData.maxprice1;
-    searchItemsRequest["MinSavingPercent"] = +parsedData.percent1;
+    parsedData.percent1 &&
+      (searchItemsRequest["MinSavingPercent"] = +parsedData.percent1);
 
     timeout1();
   }
@@ -223,7 +224,8 @@ const initiateSearch = (parsedData) => {
     searchItemsRequest["Merchant"] = parsedData.merchant2;
     searchItemsRequest["MinPrice"] = +parsedData.minprice2;
     searchItemsRequest["MaxPrice"] = +parsedData.maxprice2;
-    searchItemsRequest["MinSavingPercent"] = +parsedData.percent2;
+    parsedData.percent2 &&
+      (searchItemsRequest["MinSavingPercent"] = +parsedData.percent2);
 
     timer3 = setTimeout(() => {
       timeout2();
