@@ -18,14 +18,19 @@ exports.sendFailNotification = (data) => {
 client.on("successNotification", (data) => {
   const channel = client.channels.cache.get(process.env.CHANNEL_ID);
 
-  const pretty = `
+  let pretty = ``;
+
+  data.map(
+    (d) =>
+      (pretty += `
   > **Item Found!**
-  **${data.productName}**
-  Price: ${data.price}
-  Keywords: ${data.keywords}
-  ${data.imageURL}
-  ${data.productURL}
-  `;
+  **${d.productName}**
+  Price: ${d.price}
+  Keywords: ${d.keywords}
+  ${d.imageURL}
+  ${d.productURL}
+  `)
+  );
 
   channel.send(pretty);
 });

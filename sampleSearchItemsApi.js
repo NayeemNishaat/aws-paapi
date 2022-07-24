@@ -66,7 +66,7 @@ searchItemsRequest2["PartnerType"] = searchItemsRequest["PartnerType"] =
 // searchItemsRequest2["SearchIndex"] = "VideoGames";
 
 /** Specify item count to be returned in search result */
-searchItemsRequest2["ItemCount"] = searchItemsRequest["ItemCount"] = 1;
+searchItemsRequest2["ItemCount"] = searchItemsRequest["ItemCount"] = 5;
 
 /**
  * Choose resources you want from SearchItemsResource enum
@@ -100,20 +100,32 @@ const initiateSearch = (parsedData) => {
               searchItemsResponse["Errors"][0]["Message"]
             );
           }
-          const extractedData = {
-            resultCount: searchItemsResponse.SearchResult.TotalResultCount,
-            imageURL:
-              searchItemsResponse.SearchResult.Items[0].Images.Primary.Medium
-                .URL,
-            productName:
-              searchItemsResponse.SearchResult.Items[0].ItemInfo.Title
-                .DisplayValue,
-            price:
-              searchItemsResponse.SearchResult.Items[0].Offers.Listings[0].Price
-                .DisplayAmount,
-            productURL: searchItemsResponse.SearchResult.Items[0].DetailPageURL,
-            keywords: searchItemsRequest["Keywords"]
-          };
+
+          // console.log(JSON.stringify(searchItemsResponse, null, 2));
+
+          const extractedData = searchItemsResponse.SearchResult.Items.map(
+            (item) => ({
+              imageURL: item.Images.Primary.Medium.URL,
+              productName: item.ItemInfo.Title.DisplayValue,
+              price: item.Offers.Listings[0].Price.DisplayAmount,
+              productURL: item.DetailPageURL,
+              keywords: searchItemsRequest["Keywords"]
+            })
+          );
+          // const extractedData = {
+          //   resultCount: searchItemsResponse.SearchResult.TotalResultCount,
+          //   imageURL:
+          //     searchItemsResponse.SearchResult.Items[0].Images.Primary.Medium
+          //       .URL,
+          //   productName:
+          //     searchItemsResponse.SearchResult.Items[0].ItemInfo.Title
+          //       .DisplayValue,
+          //   price:
+          //     searchItemsResponse.SearchResult.Items[0].Offers.Listings[0].Price
+          //       .DisplayAmount,
+          //   productURL: searchItemsResponse.SearchResult.Items[0].DetailPageURL,
+          //   keywords: searchItemsRequest["Keywords"]
+          // };
 
           console.log(
             "Is different result for 1st request?",
