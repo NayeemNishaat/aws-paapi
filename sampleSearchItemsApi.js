@@ -96,12 +96,10 @@ const initiateSearch = (parsedData) => {
             );
 
           if (searchItemsResponse["Errors"] !== undefined) {
-            return sendDiscordNotification(
+            return sendFailNotification(
               searchItemsResponse["Errors"][0]["Message"]
             );
           }
-
-          // console.log(JSON.stringify(searchItemsResponse, null, 2));
 
           const extractedData = searchItemsResponse.SearchResult.Items.map(
             (item) => ({
@@ -112,20 +110,6 @@ const initiateSearch = (parsedData) => {
               keywords: searchItemsRequest["Keywords"]
             })
           );
-          // const extractedData = {
-          //   resultCount: searchItemsResponse.SearchResult.TotalResultCount,
-          //   imageURL:
-          //     searchItemsResponse.SearchResult.Items[0].Images.Primary.Medium
-          //       .URL,
-          //   productName:
-          //     searchItemsResponse.SearchResult.Items[0].ItemInfo.Title
-          //       .DisplayValue,
-          //   price:
-          //     searchItemsResponse.SearchResult.Items[0].Offers.Listings[0].Price
-          //       .DisplayAmount,
-          //   productURL: searchItemsResponse.SearchResult.Items[0].DetailPageURL,
-          //   keywords: searchItemsRequest["Keywords"]
-          // };
 
           console.log(
             "Is different result for 1st request?",
@@ -169,20 +153,15 @@ const initiateSearch = (parsedData) => {
             );
           }
 
-          const extractedData = {
-            resultCount: searchItemsResponse.SearchResult.TotalResultCount,
-            imageURL:
-              searchItemsResponse.SearchResult.Items[0].Images.Primary.Medium
-                .URL,
-            productName:
-              searchItemsResponse.SearchResult.Items[0].ItemInfo.Title
-                .DisplayValue,
-            price:
-              searchItemsResponse.SearchResult.Items[0].Offers.Listings[0].Price
-                .DisplayAmount,
-            productURL: searchItemsResponse.SearchResult.Items[0].DetailPageURL,
-            keywords: searchItemsRequest["Keywords"]
-          };
+          const extractedData = searchItemsResponse.SearchResult.Items.map(
+            (item) => ({
+              imageURL: item.Images.Primary.Medium.URL,
+              productName: item.ItemInfo.Title.DisplayValue,
+              price: item.Offers.Listings[0].Price.DisplayAmount,
+              productURL: item.DetailPageURL,
+              keywords: searchItemsRequest["Keywords"]
+            })
+          );
 
           console.log(
             "Is different result for 2nd request?",
@@ -230,14 +209,14 @@ const initiateSearch = (parsedData) => {
   }
 
   if (parsedData.keywords2) {
-    searchItemsRequest["Keywords"] = parsedData.keywords2;
-    searchItemsRequest["SearchIndex"] = parsedData.searchIndex2;
-    searchItemsRequest["Brand"] = parsedData.brand2;
-    searchItemsRequest["Merchant"] = parsedData.merchant2;
-    searchItemsRequest["MinPrice"] = +parsedData.minprice2;
-    searchItemsRequest["MaxPrice"] = +parsedData.maxprice2;
+    searchItemsRequest2["Keywords"] = parsedData.keywords2;
+    searchItemsRequest2["SearchIndex"] = parsedData.searchIndex2;
+    searchItemsRequest2["Brand"] = parsedData.brand2;
+    searchItemsRequest2["Merchant"] = parsedData.merchant2;
+    searchItemsRequest2["MinPrice"] = +parsedData.minprice2;
+    searchItemsRequest2["MaxPrice"] = +parsedData.maxprice2;
     parsedData.percent2 &&
-      (searchItemsRequest["MinSavingPercent"] = +parsedData.percent2);
+      (searchItemsRequest2["MinSavingPercent"] = +parsedData.percent2);
 
     timer3 = setTimeout(() => {
       timeout2();
