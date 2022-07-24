@@ -197,11 +197,15 @@ const initiateSearch = (parsedData) => {
 
   if (parsedData.keywords1) {
     searchItemsRequest["Keywords"] = parsedData.keywords1;
-    searchItemsRequest["SearchIndex"] = parsedData.searchIndex1;
-    searchItemsRequest["Brand"] = parsedData.brand1;
-    searchItemsRequest["Merchant"] = parsedData.merchant1;
-    searchItemsRequest["MinPrice"] = +parsedData.minprice1;
-    searchItemsRequest["MaxPrice"] = +parsedData.maxprice1;
+    parsedData.searchIndex1 &&
+      (searchItemsRequest["SearchIndex"] = parsedData.searchIndex1);
+    parsedData.brand1 && (searchItemsRequest["Brand"] = parsedData.brand1);
+    parsedData.merchant1 &&
+      (searchItemsRequest["Merchant"] = parsedData.merchant1);
+    parsedData.minprice1 &&
+      (searchItemsRequest["MinPrice"] = +parsedData.minprice1);
+    parsedData.maxprice1 &&
+      (searchItemsRequest["MaxPrice"] = +parsedData.maxprice1);
     parsedData.percent1 &&
       (searchItemsRequest["MinSavingPercent"] = +parsedData.percent1);
 
@@ -210,13 +214,17 @@ const initiateSearch = (parsedData) => {
 
   if (parsedData.keywords2) {
     searchItemsRequest2["Keywords"] = parsedData.keywords2;
-    searchItemsRequest2["SearchIndex"] = parsedData.searchIndex2;
-    searchItemsRequest2["Brand"] = parsedData.brand2;
-    searchItemsRequest2["Merchant"] = parsedData.merchant2;
-    searchItemsRequest2["MinPrice"] = +parsedData.minprice2;
-    searchItemsRequest2["MaxPrice"] = +parsedData.maxprice2;
+    parsedData.searchIndex2 &&
+      (searchItemsRequest["SearchIndex"] = parsedData.searchIndex2);
+    parsedData.brand2 && (searchItemsRequest["Brand"] = parsedData.brand2);
+    parsedData.merchant2 &&
+      (searchItemsRequest["Merchant"] = parsedData.merchant2);
+    parsedData.minprice2 &&
+      (searchItemsRequest["MinPrice"] = +parsedData.minprice2);
+    parsedData.maxprice2 &&
+      (searchItemsRequest["MaxPrice"] = +parsedData.maxprice2);
     parsedData.percent2 &&
-      (searchItemsRequest2["MinSavingPercent"] = +parsedData.percent2);
+      (searchItemsRequest["MinSavingPercent"] = +parsedData.percent2);
 
     timer3 = setTimeout(() => {
       timeout2();

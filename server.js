@@ -51,3 +51,7 @@ const server = http.createServer(async (req, res) => {
 server.listen(5000, () => {
   console.log("Server listening on port 5000.");
 });
+
+// tar --exclude "./node_modules" --exclude "./.git" -zcvf aws.tgz ./ -> Create Archive
+// tar --exclude "./node_modules" -X "package-lock.json" -zcvf aws.tgz ./
+// tar -zxvf aws.tgz -> Extract Archive
